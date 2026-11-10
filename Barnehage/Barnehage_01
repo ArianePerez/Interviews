@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="no" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barnehage Interview - Ariane</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-br from-amber-50 via-teal-50 to-emerald-100 min-h-full flex flex-col text-slate-800"
+  >
+    <!-- Header -->
+    <header
+      class="bg-white/80 backdrop-blur-md border-b border-teal-100 sticky top-0 z-50 shadow-sm"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3"
+      >
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-xl shadow-md"
+          >
+            <i class="fa-solid fa-child-reaching"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-slate-900">Barnehage Intervju</h1>
+            <p class="text-xs text-slate-500">
+              Forbereder til barnehageassistent-jobben 🇳🇴
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span
+            id="progress-indicator"
+            class="text-sm font-medium bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full"
+          >
+            Spørsmål 1 av 38
+          </span>
+          <button
+            onclick="openQuestionList()"
+            class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2"
+          >
+            <i class="fa-solid fa-list"><span>Alle spørsmål</span></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main
+      class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6"
+    >
+      <!-- Motivational Tip Banner -->
+      <div
+        class="bg-white/90 border border-teal-200 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+      >
+        <div class="flex items-start gap-3">
+          <div class="bg-amber-100 text-amber-700 p-2.5 rounded-xl mt-0.5">
+            <i class="fa-solid fa-lightbulb text-lg"></i>
+          </div>
+          <div>
+            <h2 class="font-semibold text-slate-900 text-sm">
+              Tips til intervjuet
+            </h2>
+            <p class="text-xs text-slate-600 mt-0.5">
+              Snakk rolig, bruk din fysioterapeut-bakgrunn for å forklare
+              motorikk, og husk det norske ordtaket:
+              <em>«Det finnes ikke dårlig vær, bare dårlige klær!»</em>
+            </p>
+          </div>
+        </div>
+        <button
+          onclick="playModelVoice()"
+          id="listen-model-btn"
+          class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl text-xs font-medium transition shadow-sm flex items-center gap-2 shrink-0"
+        >
+          <i class="fa-solid fa-volume-high"></i> Hør modellsvar (TTS)
+        </button>
+      </div>
+
+      <!-- Question & Answer Card -->
+      <div
+        class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 sm:p-8 flex flex-col gap-6 relative overflow-hidden"
+      >
+        <div
+          class="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-bl-full -z-0 opacity-70 pointer-events-none"
+        ></div>
+
+        <!-- Question Header -->
+        <div class="z-10">
+          <div class="flex items-center justify-between mb-2">
+            <span
+              id="question-number-badge"
+              class="text-xs font-semibold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-lg"
+            >
+              Spørsmål 1
+            </span>
+            <div class="flex gap-2">
+              <button
+                onclick="prevQuestion()"
+                class="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition disabled:opacity-40"
+                id="prev-btn"
+                title="Forrige spørsmål"
+              >
+                <i class="fa-solid fa-arrow-left"></i>
+              </button>
+              <button
+                onclick="nextQuestion()"
+                class="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition disabled:opacity-40"
+                id="next-btn"
+                title="Neste spørsmål"
+              >
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+          <h2
+            id="question-text"
+            class="text-lg sm:text-xl font-bold text-slate-900 leading-snug"
+          >
+            Kan du fortelle litt om deg selv?
+          </h2>
+        </div>
+
+        <!-- Model Answer Box -->
+        <div
+          class="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 z-10"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <span
+              class="text-xs font-bold text-slate-600 uppercase tracking-wide flex items-center gap-1.5"
+            >
+              <i class="fa-solid fa-book-open text-teal-600"></i> Anbefalt Svar
+              (Norsk Bokmål)
+            </span>
+            <button
+              onclick="toggleAnswerVisibility()"
+              id="toggle-answer-btn"
+              class="text-xs text-teal-600 hover:underline font-medium"
+            >
+              Skjul svar
+            </button>
+          </div>
+          <p
+            id="answer-text"
+            class="text-slate-700 text-sm sm:text-base leading-relaxed"
+          >
+            Ja, selvfølgelig. Jeg heter Ariane, er 28 år gammel og kommer fra
+            Spania, men bor i Vikhammer nå. Jeg er fysioterapeut med syv års
+            erfaring og fire av disse årene var fokusert på barn. Som person er
+            jeg engasjert, åpen, fleksibel og ansvarsfull, og jeg trives med å
+            jobbe med ulike mennesker. På fritiden liker jeg å være ute i
+            naturen, lese, trene og være aktiv.
+          </p>
+        </div>
+
+        <!-- Voice Practice & AI Feedback Section -->
+        <div class="border-t border-slate-100 pt-6 z-10 flex flex-col gap-4">
+          <div
+            class="flex flex-col sm:flex-row items-center justify-between gap-4"
+          >
+            <div>
+              <h3 class="font-semibold text-slate-900 text-sm">
+                Tren på å snakke høyt (Taleopptak)
+              </h3>
+              <p class="text-xs text-slate-500">
+                Trykk på mikrofonen og svar på spørsmålet på norsk. AI-en vil
+                lytte og gi deg tilbakemelding.
+              </p>
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+              <button
+                id="mic-btn"
+                onclick="toggleSpeechRecognition()"
+                class="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white px-5 py-3 rounded-2xl font-medium text-sm transition shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2.5"
+              >
+                <i id="mic-icon" class="fa-solid fa-microphone text-lg"></i>
+                <span id="mic-text">Start å snakke</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Recording Status Indicator -->
+          <div
+            id="recording-status"
+            class="hidden items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-xs font-medium animate-pulse"
+          >
+            <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+            <span
+              >Lytter... Snakk tydelig på norsk nå. Trykk igjen på mikrofonen
+              når du er ferdig.</span
+            >
+          </div>
+
+          <!-- User Transcript & AI Feedback Output -->
+          <div id="feedback-container" class="hidden flex flex-col gap-3 mt-2">
+            <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+              <h4
+                class="text-xs font-bold text-blue-800 uppercase tracking-wide mb-1 flex items-center gap-1.5"
+              >
+                <i class="fa-solid fa-comment-dots"></i> Det du sa
+                (Transkripsjon):
+              </h4>
+              <p id="user-transcript" class="text-slate-800 text-sm italic">
+                "..."
+              </p>
+            </div>
+
+            <div
+              class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4"
+            >
+              <h4
+                class="text-xs font-bold text-emerald-800 uppercase tracking-wide mb-1 flex items-center gap-1.5"
+              >
+                <i class="fa-solid fa-robot"></i> AI Tilbakemelding &
+                Korrigering:
+              </h4>
+              <p
+                id="ai-evaluation"
+                class="text-slate-800 text-sm leading-relaxed"
+              >
+                Vennligst vent mens vi analyserer svaret ditt...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Question Selection Modal -->
+    <div
+      id="question-modal"
+      class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden border border-slate-100"
+      >
+        <div
+          class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50"
+        >
+          <h3 class="font-bold text-slate-900 text-base">
+            Alle 38 spørsmål for barnehageassistent
+          </h3>
+          <button
+            onclick="closeQuestionList()"
+            class="w-8 h-8 rounded-full bg-slate-200/70 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div
+          id="question-list-container"
+          class="p-4 overflow-y-auto flex flex-col gap-2 divide-y divide-slate-100"
+        >
+          <!-- Dynamically populated question list -->
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+      // Full 38 Questions & Answers Dataset based on the uploaded document
+      const questionsData = [
+        {
+          q: '1. Kan du fortelle litt om deg selv?',
+          a: 'Ja, selvfølgelig. Jeg heter Ariane, er 28 år gammel og kommer fra Spania, men bor i Vikhammer nå. Jeg er fysioterapeut med syv års erfaring og fire av disse årene var fokusert på barn. Som person er jeg engasjert, åpen, fleksibel og ansvarsfull, og jeg trives med å jobbe med ulike mennesker. På fritiden liker jeg å være ute i naturen, lese, trene og være aktiv.'
+        },
+        {
+          q: '2. Hvorfor ønsker du å jobbe i barnehage?',
+          a: 'Jeg ønsker å jobbe i barnehage fordi jeg er veldig glad i barn og i å bidra til at de føler seg trygge, respektert og inkludert i hverdagen. Bakgrunnen min som fysioterapeut hjelper meg til å forstå barns motoriske utvikling, bevegelse og lek. Jeg liker å gjøre kreative aktiviteter, lage mat og være ute i all slags vær sammen med barna. Jeg synes også det er fantastisk å se hvordan de lærer og vokser på sin egen måte.'
+        },
+        {
+          q: '3. Har du erfaring med å jobbe med barn?',
+          a: 'Ja, gjennom utdannelsen min som fysioterapeut og jobben min i klinikk har jeg mye erfaring med å jobbe med barn og familier. Jeg har brukt ulike kreative og fysiske aktiviteter for å hjelpe barna med forskjellige ting i hverdagen. Jeg har også fokusert på at barna skal føle seg trygge, ha det bra og få støtte når de trenger det. I tillegg har jeg samarbeidet godt med andre ansatte og støttet familiene.'
+        },
+        {
+          q: '4. Hva liker du best med å være sammen med barn?',
+          a: 'Jeg liker at barn er spontane, glade og kreative. Jeg synes det er interessant å se hvordan de tenker og opplever verden på sin egen måte. Jeg liker også å leke og gjøre ulike aktiviteter sammen med barna, og det er fint å se hvordan de utvikler seg, lærer nye ting og blir mer selvstendige i hverdagen.'
+        },
+        {
+          q: '5. Hvilke egenskaper mener du er viktige for en barnehageassistent?',
+          a: 'Jeg synes det viktigste er å være engasjert, åpen, fleksibel og ansvarsfull, og å trives med å jobbe med ulike mennesker. Det er også viktig å være en god kollega som kommuniserer godt med resten av teamet og med foreldrene. Som barnehageassistent må man være rolig, spesielt når barn trenger ekstra støtte. Jeg synes også det er viktig å være trygg og positiv, slik at barna føler seg trygge og får et godt miljø for lek, læring og utvikling.'
+        },
+        {
+          q: '6. Hvordan vil du beskrive deg selv som person?',
+          a: 'Jeg er en positiv person med god humor, og jeg er veldig åpen for å snakke om forskjellige temaer. Jeg er en ærlig og snill person som liker å lytte til andre og hjelpe dem. Jeg liker å finne gode løsninger og gjøre ting på en enkel måte. Jeg respekterer at mennesker kan ha forskjellige måter å leve livet på, fordi det er en mulighet for å lære. Jeg synes det er nødvendig et godt arbeidsmiljø for å være glad i arbeidsplassen.'
+        },
+        {
+          q: '7. Hva gjør du hvis et barn er lei seg og gråter?',
+          a: 'Hvis et barn er lei seg og gråter, prøver jeg først å være rolig og trygg. Jeg setter meg ned på samme nivå, snakker rolig og spør hva som har skjedd. Jeg lytter til barnet og prøver å forstå hva det trenger. Det viktigste er at barnet føler seg trygt og forstått, og å gi det litt rolig tid hjelper. Deretter prøver jeg også å finne en hyggelig lek eller aktivitet sammen.'
+        },
+        {
+          q: '8. Hva ville du gjort hvis to barn krangler om en leke?',
+          a: 'Hvis to barn krangler om en leke, prøver jeg å være rolig. Det er helt normalt å bli lei seg eller sint. Jeg lytter til begge barna, og hjelper dem å snakke om hva som har skjedd. Jeg minner dem på at vi må dele og vente på tur. Til slutt prøver vi å finne en fin løsning sammen, for eksempel at de bytter på leken eller at vi finner en annen morsom aktivitet vi kan gjøre sammen.'
+        },
+        {
+          q: '9. Hvordan kan du hjelpe et barn som er sjenert eller ikke vil delta i en aktivitet?',
+          a: 'Hvis et barn er sjenert eller ikke vil delta, gir jeg barnet tid og ikke presser det. Jeg snakker rolig med barnet og prøver å finne ut hva det liker. Jeg kan også invitere barnet til å bli med på en aktivitet som det synes er interessant, og kanskje delta sammen med barnet. Målet er at barnet skal føle seg trygt nok til å bli med etter hvert.'
+        },
+        {
+          q: '10. Hva synes du er viktig når man snakker med små barn?',
+          a: 'Jeg synes det er viktig å være på barnets nivå, ha øyekontakt, snakke med en rolig og trygg stemme, og bruke et enkelt språk. Det er også viktig å lytte aktivt og gi dem tid til å svare, slik at de føler seg sett og hørt.'
+        },
+        {
+          q: '11. Hvordan kan du bidra til at barna føler seg trygge i barnehagen?',
+          a: 'Jeg kan bidra til trygghet ved å være en rolig, positiv og omsorgsfull voksen. Jeg vil være til stede, lytte til barna, ha gode rutiner og vise barna at de alltid kan komme til meg hvis de trenger hjelp eller trøst.'
+        },
+        {
+          q: '12. Hva slags aktiviteter liker du å gjøre sammen med barn?',
+          a: 'Jeg liker å gjøre hverdagsaktiviteter sammen med barna, for eksempel å lage mat - da føler de seg nyttige og får være med på noe viktig. Jeg liker også veldig godt å male, tegne og være kreative sammen, fordi det gir barna mulighet til å uttrykke seg på egen måte. I tillegg er jeg veldig glad i fri lek, der barna kan velge hva de har lyst til, og å gå på tur i naturen for å oppdage ting sammen utendørs.'
+        },
+        {
+          q: '13. Hvordan stiller du deg til å være ute med barna når det regner eller er kaldt?',
+          a: 'Jeg synes det er kjempefint å være ute uansett vær! Som man sier i Norge: Det finnes ikke dårlig vær, bare dårlige klær. Jeg er vant til å være aktiv utendørs, og jeg vet hvor viktig frisk luft og bevegelse er for barnas helse og motorikk.'
+        },
+        {
+          q: '14. I en barnehage må man samarbeide mye. Hvordan er du som kollega?',
+          a: 'Jeg er en positiv og samarbeidsvillig kollega. Med erfaring som klinikkleder liker jeg å hjelpe andre og bidra til et godt arbeidsmiljø. Jeg synes det er viktig å lytte til andre, respektere forskjellige meninger og snakke sammen for å finne gode løsninger. Jeg er også fleksibel og liker å lære av andre.'
+        },
+        {
+          q: '15. Hva gjør du hvis du er uenig med en kollega?',
+          a: 'Hvis jeg er uenig med en kollega, prøver jeg først å lytte og forstå den andre personen. Jeg tar det opp på en rolig og respektfull måte i en privatsamtale. Jeg lytter til deres perspektiv, forklarer mitt syn, og sammen finner vi en god løsning som er best for barna og arbeidsmiljøet.'
+        },
+        {
+          q: '16. Hvordan ville du snakket med en forelder som er bekymret for barnet sitt?',
+          a: 'Først, ville jeg lyttet til foreldrene med empati og prøvd å forstå hva de er bekymret for. Jeg ville fortalt rolig og respektfullt hva jeg har observert. Jeg synes det er viktig å ha en god dialog med foreldrene og samarbeide for å finne en god løsning for barnet. Jeg ville også informere barnehagelæreren, så hun er klar over situasjonen og kan følge det opp videre.'
+        },
+        {
+          q: '17. Hva betyr det for deg å være en god rollemodell for barn?',
+          a: 'For meg betyr det å være en trygg, ærlig, respektfull og positiv voksen. Barna lærer mye mer av det vi gjør enn det vi sier, så det er viktig å vise god empati, tålmodighet og hvordan man løser konflikter på en fin måte. Det handler også om å respektere og sette pris på forskjellen på hverandre.'
+        },
+        {
+          q: '18. Hvordan håndterer du stress når det skjer mange ting samtidig?',
+          a: 'Når det skjer mye på en gang, prøver jeg å bevare roen og ta ting trinn for trinn. Jeg prioriterer det som haster mest, og finner en enkel og praktisk løsning. Hvis det blir for mye, er jeg ikke redd for å spørre kollegene mine om hjelp.'
+        },
+        {
+          q: '19. Kan du fortelle om en vanskelig situasjon du har opplevd, og hvordan du løste den?',
+          a: 'I mitt tidligere arbeid som fysioterapeut har jeg opplevd situasjoner der barn ble veldig urolige eller lei seg, for eksempel da foreldrene måtte vente utenfor. For å løse det, prøvde jeg å være rolig, sette meg ned på barnets nivå og lytte til det med tålmodighet. Ved å snakke med en mild stemme og gi barnet litt tid, klarte vi å skape trygghet, og situasjonen roet seg.'
+        },
+        {
+          q: '20. Hvorfor tror du at du passer til denne stillingen?',
+          a: 'Jeg tror jeg passer godt til denne stillingen fordi jeg liker å jobbe med barn og trives med en aktiv og variert hverdag. Jeg er omsorgsfull, tålmodig og engasjert, og jeg liker å være kreativ og finne på aktiviteter sammen med barna. Jeg er også opptatt av å se hvert enkelt barn og gi dem støtte når de trenger det. Jeg samarbeider godt med andre og prøver alltid å finne gode løsninger når det oppstår utfordringer. Jeg ønsker en meningsfull jobb hvor jeg kan bidra til at barna føler seg trygge, lærer og har det gøy.'
+        },
+        {
+          q: '21. Hvordan kan en barnehageassistent bidra til inkludering i en barnegruppe?',
+          a: 'Jeg kan bidra til inkludering ved å sørge for at alle barna får være med i lek og aktiviteter. Jeg prøver å se hvert enkelt barn og støtte dem når de trenger det. Jeg kan også hjelpe barna med å samarbeide, dele og respektere hverandre, slik at alle føler seg trygge og inkludert.'
+        },
+        {
+          q: '22. Hva ville du gjort hvis du la merke til at et barn ofte ble holdt utenfor av de andre?',
+          a: 'Hvis jeg ser at et barn ofte blir holdt utenfor, vil jeg først snakke med barnet og prøve å forstå hvordan det føler seg. Jeg vil også følge med på hva som skjer i gruppen. Deretter vil jeg prøve å inkludere barnet i lek og aktiviteter og hjelpe barna med å leke sammen. Jeg synes det er viktig at alle barn føler seg trygge, inkludert og velkommen.'
+        },
+        {
+          q: '23. Hvordan kan du balansere barnas behov for frihet med behovet for regler og grenser?',
+          a: 'Jeg synes det er viktig å gi barna frihet til å leke, utforske og ta egne valg, men samtidig ha tydelige og enkle regler. Jeg forklarer barna hvorfor reglene er viktige, og jeg er rolig og konsekvent når jeg setter grenser. På den måten kan barna føle seg frie, men samtidig trygge.'
+        },
+        {
+          q: '24. Hva mener du er viktig for å skape et godt samarbeid mellom barnehagen og foreldrene?',
+          a: 'Jeg synes det er viktig å ha god kommunikasjon og være åpen og respektfull med foreldrene. Det er viktig å lytte til foreldrene og dele informasjon om barnet i barnehagen. Jeg synes også det er viktig å samarbeide for å finne gode løsninger og støtte barnet på best mulig måte.'
+        },
+        {
+          q: '25. Hvorfor har du søkt jobben?',
+          a: 'Jeg har søkt denne jobben fordi jeg har flyttet til Norge og ønsker å prøve noe nytt som kan hjelpe meg å utvikle meg både personlig og profesjonelt. Jeg elsker å jobbe med barn og brenner for å skape en trygg, god og morsom hverdag for dem. Jeg har lang erfaring med barn og trives veldig godt i et aktivt og varmt miljø, og jeg ønsker bidra med min kompetanse og mitt engasjement her i barnehagen.'
+        },
+        {
+          q: '26. Hvorfor bør vi ansette akkurat deg?',
+          a: 'Dere bør ansette meg fordi jeg har lang og god erfaring med barn, og jeg brenner virkelig for å skape en trygg og morsom hverdag for dem. Jeg er en rolig, tålmodig og fleksibel person som liker å ta i et tak der det trengs. I tillegg er jeg strukturert, samarbeider godt med kollegene mine og er veldig opptatt av å se hvert enkelt barn.'
+        },
+        {
+          q: '27. Hva kan du bidra med i vår bedrift?',
+          a: 'Jeg kan bidra med min erfaring til å skape trygghet og ro rundt barna, spesielt i krevende situasjoner. I tillegg kan jeg bidra med et godt humør, at jeg er en god lagspiller med kollegene mine, og et sterkt fokus på inkludering, lek og omsorg i hverdagen.'
+        },
+        {
+          q: '28. Hvorfor valgte du akkurat den utdanningen du har tatt?',
+          a: 'Jeg valgte utdanningen som fysioterapeut fordi jeg alltid har hatt en dyp interesse for menneskekroppen, helse og å hjelpe andre. Jeg liker å jobbe med mennesker, og spesielt med barn, for å fremme deres utvikling, helse og velvære.'
+        },
+        {
+          q: '29. Hvorfor sluttet du i din forrige jobb?',
+          a: 'Jeg sluttet i min forrige jobb fordi jeg har flyttet til Norge sammen med partneren min for å starte et nytt kapittel her. Jeg ønsket meg en meningsfull jobb i et nytt miljø hvor jeg kan bruke mine egenskaper og min erfaring med barn. Jeg valgte Norge fordi det har vært en drøm for meg lenge. Siden jeg var på Erasmus-utveksling i 2018, har jeg vært fascinert av de nordiske landene, og Norge var det landet som fanger meg mest. Jeg elsker naturen, friluftsliv-kulturen og tryggheten her, og nå kjentes det som det riktige tidspunktet å flytte hit og starte et nytt kapittel.'
+        },
+        {
+          q: '30. Hvordan kan du bruke dine tidligere erfaringer i denne jobben?',
+          a: 'Jeg kan bruke min bakgrunn som fysioterapeut og min erfaring med barn til å møte dem med stor tålmodighet, forståelse og trygghet. Jeg er vant til å observere hva barn trenger, støtte dem i motorisk og sosial utvikling, og kommunisere godt med både barn og foreldre.'
+        },
+        {
+          q: '31. Liker du best å jobbe i team eller på egen hånd?',
+          a: 'Jeg liker absolutt best å jobbe i team. I en barnehage er man avhengig av et godt samarbeid med kollegene for at hverdagen skal flyte greit. Jeg liker å dele oppgaver, hjelpe hverandre og skape et godt arbeidsmiljø sammen. Samtidig er jeg selvstendig og klarer meg fint på egen hånd når situasjonen krever det.'
+        },
+        {
+          q: '32. Hvilke arbeidsoppgaver liker du best?',
+          a: 'Jeg liker best de aktivitetene der jeg er tett på barna - for eksempel å være med på lek ute i naturen, gjøre kreative ting sammen, eller delta i hverdagsrutiner som måltider og samlingsstund. Det er da man virkelig blir kjent med barna og kan skape gode relasjoner.'
+        },
+        {
+          q: '33. Hvilke arbeidsoppgaver liker du minst?',
+          a: "Det er egentlig ikke så mye jeg misliker, for jeg liker både å være i aktivitet med barna og å hjelpe til med litt organisering og kontorarbeid. Det eneste jeg kjenner på er jo at jeg er ny i Norge og ennå ikke har opplevd en ekte vinter her! Men som dere sier: 'Det finnes ikke dårlig vær, bare dårlige klær' - jeg er klar til å teste det ut!"
+        },
+        {
+          q: '34. Nevn tre sterke sider ved deg selv.',
+          a: 'Jeg vil si at mine tre sterkeste sider er at jeg er tålmodig, omsorgsfull og strukturert. Jeg klarer å bevare roen når det skjer mye på en gang, og jeg er veldig oppmerksom på å se behovene til andre rundt meg.'
+        },
+        {
+          q: '35. Nevn tre svake sider ved deg selv.',
+          a: 'Hvis jeg skal nevne tre ting, så er det for det første at jeg kan være litt perfeksjonist og ønsker at alt skal være veldig godt gjort. For det andre kan jeg av og til bekymre meg litt for mye for at alle andre skal ha det bra. Og for det tredje, siden jeg er i gang med å lære norsk, vet jeg at jeg i starten kan trenge at folk gjentar ting av og til, noe som utfordrer mitt lille perfeksjonisme-gen! Men jeg har lært meg å be om hjelp, og målet mitt er å bli bedre for hver dag som går.'
+        },
+        {
+          q: '36. Hvordan takler du stress?',
+          a: 'Når det skjer mye på en gang, prøver jeg å bevare roen og ta ting trinn for trinn. Jeg prioriterer det som haster mest, og finner en enkel og praktisk løsning. Hvis det blir for mye, spør jeg alltid kollegene mine om hjelp.'
+        },
+        {
+          q: '37. Hva gjør deg sint?',
+          a: 'Jeg blir sjelden sint, men jeg kan bli litt frustrert over urettferdighet eller mangel på respekt for andre. I tillegg er det som gjør meg mest lei meg, hvis barn ikke blir godt ivaretatt eller inkludert.'
+        },
+        {
+          q: '38. Hva gjør du om fem år?',
+          a: 'Om fem år ser jeg for meg at jeg har falt godt til ro her i Norge, snakker flytende norsk og trives veldig godt i en barnehage. På sikt, når språket er helt på plass, har jeg også en drøm om å få godkjent fysioterapeut-utdannelsen min her, slik at jeg kanskje kan jobbe litt med det ved siden av en dag. Men akkurat nå er fokuset mitt 100% her i barnehagen!'
+        }
+      ]
+
+      let currentIndex = 0
+      let isAnswerVisible = true
+      let recognition = null
+      let isRecording = false
+
+      // Initialize App
+      window.addEventListener('DOMContentLoaded', () => {
+        loadQuestion(0)
+        setupSpeechRecognition()
+        populateQuestionListModal()
+      })
+
+      function loadQuestion(index) {
+        currentIndex = index
+        const qObj = questionsData[index]
+
+        document.getElementById('question-number-badge').innerText =
+          `Spørsmål ${index + 1} av ${questionsData.length}`
+        document.getElementById('question-text').innerText = qObj.q
+        document.getElementById('answer-text').innerText = qObj.a
+        document.getElementById('progress-indicator').innerText =
+          `Spørsmål ${index + 1} / ${questionsData.length}`
+
+        // Buttons state
+        document.getElementById('prev-btn').disabled = index === 0
+        document.getElementById('next-btn').disabled =
+          index === questionsData.length - 1
+
+        // Reset feedback
+        document.getElementById('feedback-container').classList.add('hidden')
+        if (isRecording) stopSpeechRecognition()
+      }
+
+      function nextQuestion() {
+        if (currentIndex < questionsData.length - 1) {
+          loadQuestion(currentIndex + 1)
+        }
+      }
+
+      function prevQuestion() {
+        if (currentIndex > 0) {
+          loadQuestion(currentIndex - 1)
+        }
+      }
+
+      function toggleAnswerVisibility() {
+        isAnswerVisible = !isAnswerVisible
+        const ansEl = document.getElementById('answer-text')
+        const btnEl = document.getElementById('toggle-answer-btn')
+        if (isAnswerVisible) {
+          ansEl.classList.remove('blur-sm', 'select-none')
+          btnEl.innerText = 'Skjul svar'
+        } else {
+          ansEl.classList.add('blur-sm', 'select-none')
+          btnEl.innerText = 'Vis svar'
+        }
+      }
+
+      // Text-to-Speech (TTS) for Model Norwegian Pronunciation
+      function playModelVoice() {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel()
+          const textToSpeak = document.getElementById('answer-text').innerText
+          const utterance = new SpeechSynthesisUtterance(textToSpeak)
+          utterance.lang = 'nb-NO' // Norwegian Bokmål
+          utterance.rate = 0.9 // Slightly slower for language learners
+
+          const btn = document.getElementById('listen-model-btn')
+          const originalHTML = btn.innerHTML
+          btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Snakker...`
+          btn.disabled = true
+
+          utterance.onend = () => {
+            btn.innerHTML = originalHTML
+            btn.disabled = false
+          }
+          utterance.onerror = () => {
+            btn.innerHTML = originalHTML
+            btn.disabled = false
+          }
+
+          window.speechSynthesis.speak(utterance)
+        } else {
+          alert('Nettleseren din støtter ikke talesyntese (TTS).')
+        }
+      }
+
+      // Speech Recognition (Web Speech API)
+      function setupSpeechRecognition() {
+        const SpeechRecognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition
+        if (SpeechRecognition) {
+          recognition = new SpeechRecognition()
+          recognition.lang = 'nb-NO'
+          recognition.continuous = false
+          recognition.interimResults = true
+
+          recognition.onresult = (event) => {
+            let interimTranscript = ''
+            let finalTranscript = ''
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+              if (event.results[i].isFinal) {
+                finalTranscript += event.results[i][0].transcript
+              } else {
+                interimTranscript += event.results[i][0].transcript
+              }
+            }
+
+            const spokenText = finalTranscript || interimTranscript
+            if (spokenText) {
+              document.getElementById('user-transcript').innerText =
+                `"${spokenText}"`
+              if (finalTranscript) {
+                evaluateSpokenAnswer(finalTranscript)
+              }
+            }
+          }
+
+          recognition.onerror = (event) => {
+            console.error('Speech recognition error', event.error)
+            stopSpeechRecognition()
+          }
+
+          recognition.onend = () => {
+            if (isRecording) {
+              // Restart if still marked recording
+              try {
+                recognition.start()
+              } catch (e) {}
+            }
+          }
+        }
+      }
+
+      function toggleSpeechRecognition() {
+        if (!recognition) {
+          alert(
+            'Talejenkjennelse (Speech Recognition) støttes ikke av din nettleser. Prøv Google Chrome.'
+          )
+          return
+        }
+
+        if (isRecording) {
+          stopSpeechRecognition()
+        } else {
+          startSpeechRecognition()
+        }
+      }
+
+      function startSpeechRecognition() {
+        try {
+          recognition.start()
+          isRecording = true
+          document
+            .getElementById('mic-btn')
+            .classList.remove('bg-emerald-600', 'hover:bg-emerald-700')
+          document
+            .getElementById('mic-btn')
+            .classList.add('bg-red-600', 'hover:bg-red-700')
+          document.getElementById('mic-icon').className =
+            'fa-solid fa-stop text-lg'
+          document.getElementById('mic-text').innerText = 'Stopp opptak'
+          document.getElementById('recording-status').classList.remove('hidden')
+          document.getElementById('recording-status').classList.add('flex')
+          document
+            .getElementById('feedback-container')
+            .classList.remove('hidden')
+          document.getElementById('user-transcript').innerText =
+            'Lytter til stemmen din...'
+          document.getElementById('ai-evaluation').innerText =
+            'Venter på at du snakker ferdig...'
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
+      function stopSpeechRecognition() {
+        try {
+          recognition.stop()
+        } catch (e) {}
+        isRecording = false
+        document
+          .getElementById('mic-btn')
+          .classList.remove('bg-red-600', 'hover:bg-red-700')
+        document
+          .getElementById('mic-btn')
+          .classList.add('bg-emerald-600', 'hover:bg-emerald-700')
+        document.getElementById('mic-icon').className =
+          'fa-solid fa-microphone text-lg'
+        document.getElementById('mic-text').innerText = 'Start å snakke'
+        document.getElementById('recording-status').classList.add('hidden')
+        document.getElementById('recording-status').classList.remove('flex')
+      }
+
+      // Local Smart AI Evaluation Simulation comparing with Model Answer
+      function evaluateSpokenAnswer(userText) {
+        const modelAnswer = questionsData[currentIndex].a.toLowerCase()
+        const userLower = userText.toLowerCase()
+
+        // Word matching metrics
+        const modelWords = modelAnswer.split(/\s+/)
+        const userWords = userLower.split(/\s+/)
+
+        let matchedCount = 0
+        userWords.forEach((w) => {
+          if (w.length > 3 && modelAnswer.includes(w)) {
+            matchedCount++
+          }
+        })
+
+        const matchRatio = matchedCount / Math.max(1, userWords.length)
+
+        let feedback = ''
+        let emoji = '🌟'
+
+        if (userWords.length < 3) {
+          feedback =
+            'Svaret var litt kort. Prøv å utdype mer og koble det til din erfaring som fysioterapeut!'
+          emoji = '💡'
+        } else if (matchRatio > 0.4 || userWords.length > 10) {
+          feedback = `Utmerket jobbet, Ariane! Du traff på flere sentrale nøkkelord og setningen fløt fint. Uttalen din på norsk fungerer bra til intervjuet. Husk å holde rolig tempo! ${emoji}`
+        } else {
+          feedback = `Bra forsøk! Du fikk sagt noe, men prøv å sjekke modellsvaret for å få med flere spesifikke norske uttrykk og ord knyttet til barnehagen. Sjekk ordforrådet som «trygghet», «inkludert» og «motorikk».`
+        }
+
+        document.getElementById('ai-evaluation').innerText = feedback
+      }
+
+      // Modal Question List
+      function openQuestionList() {
+        const modal = document.getElementById('question-modal')
+        modal.classList.remove('hidden')
+      }
+
+      function closeQuestionList() {
+        const modal = document.getElementById('question-modal')
+        modal.classList.add('hidden')
+      }
+
+      function populateQuestionListModal() {
+        const container = document.getElementById('question-list-container')
+        container.innerHTML = ''
+        questionsData.forEach((item, index) => {
+          const btn = document.createElement('button')
+          btn.className =
+            'text-left p-3 hover:bg-teal-50 rounded-xl transition flex items-center justify-between group'
+          btn.innerHTML = `
+                    <span class="text-sm font-medium text-slate-800 group-hover:text-teal-700">${item.q}</span>
+                    <span class="text-xs bg-slate-100 group-hover:bg-teal-200 group-hover:text-teal-900 text-slate-600 px-2 py-1 rounded-lg shrink-0">#{index + 1}</span>
+                `
+          btn.onclick = () => {
+            loadQuestion(index)
+            closeQuestionList()
+          }
+          container.appendChild(btn)
+        })
+      }
+    </script>
+  </body>
+</html>
