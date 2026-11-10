@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Barnehage Interview - Ariane</title>
+    <title>Barnehage Interview Practice - Ariane</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
@@ -19,6 +19,21 @@
     <style>
       body {
         font-family: 'Inter', sans-serif;
+      }
+      .highlight {
+        color: #ef4444 !important; /* Rojo brillante */
+        font-weight: bold;
+        background-color: #fee2e2;
+        padding: 0 2px;
+        border-radius: 3px;
+      }
+      .word {
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+        display: inline;
+      }
+      .word:hover {
+        background-color: #f3f4f6;
       }
     </style>
   </head>
@@ -39,9 +54,11 @@
             <i class="fa-solid fa-child-reaching"></i>
           </div>
           <div>
-            <h1 class="text-xl font-bold text-slate-900">Barnehage Intervju</h1>
+            <h1 class="text-xl font-bold text-slate-900">
+              Barnehage Intervju Trener
+            </h1>
             <p class="text-xs text-slate-500">
-              Forbereder til barnehageassistent-jobben 🇳🇴
+              Forbereder Ariane til barnehageassistent-jobben 🇳🇴
             </p>
           </div>
         </div>
@@ -76,7 +93,7 @@
           </div>
           <div>
             <h2 class="font-semibold text-slate-900 text-sm">
-              Tips til intervjuet
+              Tips til intervjuet på fredag
             </h2>
             <p class="text-xs text-slate-600 mt-0.5">
               Snakk rolig, bruk din fysioterapeut-bakgrunn for å forklare
@@ -85,13 +102,31 @@
             </p>
           </div>
         </div>
-        <button
-          onclick="playModelVoice()"
-          id="listen-model-btn"
-          class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl text-xs font-medium transition shadow-sm flex items-center gap-2 shrink-0"
-        >
-          <i class="fa-solid fa-volume-high"></i> Hør modellsvar (TTS)
-        </button>
+
+        <!-- Controles de Reproducción y Karaoke -->
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button
+            onclick="playModelVoice()"
+            id="listen-model-btn"
+            class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl text-xs font-medium transition shadow-sm flex items-center gap-2"
+          >
+            <i class="fa-solid fa-volume-high"></i> Hør modellsvar (TTS)
+          </button>
+          <button
+            onclick="pauseAudio()"
+            id="pause-btn"
+            class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-xl text-xs font-medium transition shadow-sm hidden"
+          >
+            ⏸ Pause
+          </button>
+          <button
+            onclick="stopAudio()"
+            id="stop-btn"
+            class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-2 rounded-xl text-xs font-medium transition shadow-sm hidden"
+          >
+            ⏹ Stopp
+          </button>
+        </div>
       </div>
 
       <!-- Question & Answer Card -->
@@ -147,7 +182,7 @@
               class="text-xs font-bold text-slate-600 uppercase tracking-wide flex items-center gap-1.5"
             >
               <i class="fa-solid fa-book-open text-teal-600"></i> Anbefalt Svar
-              (Norsk Bokmål)
+              (Haz clic en cualquier palabra para escucharla)
             </span>
             <button
               onclick="toggleAnswerVisibility()"
@@ -157,17 +192,12 @@
               Skjul svar
             </button>
           </div>
-          <p
-            id="answer-text"
+          <div
+            id="answer-container"
             class="text-slate-700 text-sm sm:text-base leading-relaxed"
           >
-            Ja, selvfølgelig. Jeg heter Ariane, er 28 år gammel og kommer fra
-            Spania, men bor i Vikhammer nå. Jeg er fysioterapeut med syv års
-            erfaring og fire av disse årene var fokusert på barn. Som person er
-            jeg engasjert, åpen, fleksibel og ansvarsfull, og jeg trives med å
-            jobbe med ulike mennesker. På fritiden liker jeg å være ute i
-            naturen, lese, trene og være aktiv.
-          </p>
+            <!-- El texto estructurado con espacios correctos aparecerá aquí -->
+          </div>
         </div>
 
         <!-- Voice Practice & AI Feedback Section -->
@@ -181,7 +211,7 @@
               </h3>
               <p class="text-xs text-slate-500">
                 Trykk på mikrofonen og svar på spørsmålet på norsk. AI-en vil
-                lytte og gi deg tilbakemelding.
+                lytte og gi deg konkret tilbakemelding på uttalen.
               </p>
             </div>
             <div class="flex items-center gap-3 w-full sm:w-auto">
@@ -214,8 +244,8 @@
               <h4
                 class="text-xs font-bold text-blue-800 uppercase tracking-wide mb-1 flex items-center gap-1.5"
               >
-                <i class="fa-solid fa-comment-dots"></i> Det du sa
-                (Transkripsjon):
+                <i class="fa-solid fa-comment-dots"></i> Det mikrofonen
+                oppfattet (Transkripsjon):
               </h4>
               <p id="user-transcript" class="text-slate-800 text-sm italic">
                 "..."
@@ -228,14 +258,13 @@
               <h4
                 class="text-xs font-bold text-emerald-800 uppercase tracking-wide mb-1 flex items-center gap-1.5"
               >
-                <i class="fa-solid fa-robot"></i> AI Tilbakemelding &
-                Korrigering:
+                <i class="fa-solid fa-robot"></i> Uttaleanalyse & Korrigering:
               </h4>
               <p
                 id="ai-evaluation"
                 class="text-slate-800 text-sm leading-relaxed"
               >
-                Vennligst vent mens vi analyserer svaret ditt...
+                Vennligst vent mens vi analyserer uttalen din...
               </p>
             </div>
           </div>
@@ -275,7 +304,6 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-      // Full 38 Questions & Answers Dataset based on the uploaded document
       const questionsData = [
         {
           q: '1. Kan du fortelle litt om deg selv?',
@@ -435,6 +463,9 @@
       let isAnswerVisible = true
       let recognition = null
       let isRecording = false
+      let synth = window.speechSynthesis
+      let utterance = null
+      let isPaused = false
 
       // Initialize App
       window.addEventListener('DOMContentLoaded', () => {
@@ -444,13 +475,13 @@
       })
 
       function loadQuestion(index) {
+        stopAudio()
         currentIndex = index
         const qObj = questionsData[index]
 
         document.getElementById('question-number-badge').innerText =
           `Spørsmål ${index + 1} av ${questionsData.length}`
         document.getElementById('question-text').innerText = qObj.q
-        document.getElementById('answer-text').innerText = qObj.a
         document.getElementById('progress-indicator').innerText =
           `Spørsmål ${index + 1} / ${questionsData.length}`
 
@@ -458,6 +489,19 @@
         document.getElementById('prev-btn').disabled = index === 0
         document.getElementById('next-btn').disabled =
           index === questionsData.length - 1
+
+        // Render answer with correct spaces and interactive words
+        const container = document.getElementById('answer-container')
+        container.innerHTML = ''
+        const tokens = qObj.a.split(' ')
+        tokens.forEach((token, wIdx) => {
+          const span = document.createElement('span')
+          span.textContent = token + ' '
+          span.className = 'word'
+          span.dataset.index = wIdx
+          span.onclick = () => playSingleWord(token)
+          container.appendChild(span)
+        })
 
         // Reset feedback
         document.getElementById('feedback-container').classList.add('hidden')
@@ -478,7 +522,7 @@
 
       function toggleAnswerVisibility() {
         isAnswerVisible = !isAnswerVisible
-        const ansEl = document.getElementById('answer-text')
+        const ansEl = document.getElementById('answer-container')
         const btnEl = document.getElementById('toggle-answer-btn')
         if (isAnswerVisible) {
           ansEl.classList.remove('blur-sm', 'select-none')
@@ -489,33 +533,82 @@
         }
       }
 
-      // Text-to-Speech (TTS) for Model Norwegian Pronunciation
+      // Text-to-Speech (TTS) with Karaoke Highlighting and Pause Controls
       function playModelVoice() {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel()
-          const textToSpeak = document.getElementById('answer-text').innerText
-          const utterance = new SpeechSynthesisUtterance(textToSpeak)
-          utterance.lang = 'nb-NO' // Norwegian Bokmål
-          utterance.rate = 0.9 // Slightly slower for language learners
+        stopAudio()
+        const textToSpeak = questionsData[currentIndex].a
+        utterance = new SpeechSynthesisUtterance(textToSpeak)
+        utterance.lang = 'nb-NO' // Norwegian Bokmål
+        utterance.rate = 0.9 // Slightly slower for language learners
 
-          const btn = document.getElementById('listen-model-btn')
-          const originalHTML = btn.innerHTML
-          btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Snakker...`
-          btn.disabled = true
+        const wordSpans = document.querySelectorAll('#answer-container .word')
+        const wordsArray = textToSpeak.split(' ')
 
-          utterance.onend = () => {
-            btn.innerHTML = originalHTML
-            btn.disabled = false
+        utterance.onboundary = (event) => {
+          if (event.name === 'word') {
+            wordSpans.forEach((s) => s.classList.remove('highlight'))
+            let accumulated = 0
+            for (let i = 0; i < wordsArray.length; i++) {
+              accumulated += wordsArray[i].length + 1
+              if (event.charIndex <= accumulated) {
+                if (wordSpans[i]) wordSpans[i].classList.add('highlight')
+                break
+              }
+            }
           }
-          utterance.onerror = () => {
-            btn.innerHTML = originalHTML
-            btn.disabled = false
-          }
-
-          window.speechSynthesis.speak(utterance)
-        } else {
-          alert('Nettleseren din støtter ikke talesyntese (TTS).')
         }
+
+        utterance.onend = () => {
+          wordSpans.forEach((s) => s.classList.remove('highlight'))
+          document.getElementById('listen-model-btn').classList.remove('hidden')
+          document.getElementById('pause-btn').classList.add('hidden')
+          document.getElementById('stop-btn').classList.add('hidden')
+          isPaused = false
+        }
+
+        document.getElementById('listen-model-btn').classList.add('hidden')
+        document.getElementById('pause-btn').classList.remove('hidden')
+        document.getElementById('stop-btn').classList.remove('hidden')
+
+        synth.speak(utterance)
+      }
+
+      function pauseAudio() {
+        if (synth.speaking) {
+          if (isPaused) {
+            synth.resume()
+            isPaused = false
+            document.getElementById('pause-btn').innerHTML = '⏸ Pause'
+          } else {
+            synth.pause()
+            isPaused = true
+            document.getElementById('pause-btn').innerHTML = '▶ Fortsett'
+          }
+        }
+      }
+
+      function stopAudio() {
+        if (synth.speaking || synth.paused) {
+          synth.cancel()
+        }
+        isPaused = false
+        document.getElementById('listen-model-btn').classList.remove('hidden')
+        document.getElementById('pause-btn').classList.add('hidden')
+        document.getElementById('stop-btn').classList.add('hidden')
+        document.getElementById('pause-btn').innerHTML = '⏸ Pause'
+        document
+          .querySelectorAll('#answer-container .word')
+          .forEach((s) => s.classList.remove('highlight'))
+      }
+
+      function playSingleWord(word) {
+        stopAudio()
+        let cleanWord = word.replace(/[^a-zA-ZæøåÆØÅéÉ]/g, '')
+        if (!cleanWord) cleanWord = word
+        let singleUtter = new SpeechSynthesisUtterance(cleanWord)
+        singleUtter.lang = 'nb-NO'
+        singleUtter.rate = 0.8
+        synth.speak(singleUtter)
       }
 
       // Speech Recognition (Web Speech API)
@@ -557,7 +650,6 @@
 
           recognition.onend = () => {
             if (isRecording) {
-              // Restart if still marked recording
               try {
                 recognition.start()
               } catch (e) {}
@@ -602,7 +694,7 @@
           document.getElementById('user-transcript').innerText =
             'Lytter til stemmen din...'
           document.getElementById('ai-evaluation').innerText =
-            'Venter på at du snakker ferdig...'
+            'Analyserer uttalen din...'
         } catch (e) {
           console.error(e)
         }
@@ -626,38 +718,44 @@
         document.getElementById('recording-status').classList.remove('flex')
       }
 
-      // Local Smart AI Evaluation Simulation comparing with Model Answer
+      // Smart Pronunciation Correction & Evaluation comparing with Model Answer
       function evaluateSpokenAnswer(userText) {
-        const modelAnswer = questionsData[currentIndex].a.toLowerCase()
+        const modelAnswerText = questionsData[currentIndex].a
+        const modelLower = modelAnswerText.toLowerCase()
         const userLower = userText.toLowerCase()
 
-        // Word matching metrics
-        const modelWords = modelAnswer.split(/\s+/)
-        const userWords = userLower.split(/\s+/)
+        // Clean punctuation for comparison
+        const cleanModelWords = modelLower
+          .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()«»"]/g, '')
+          .split(/\s+/)
+        const cleanUserWords = userLower
+          .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()«»"]/g, '')
+          .split(/\s+/)
 
-        let matchedCount = 0
-        userWords.forEach((w) => {
-          if (w.length > 3 && modelAnswer.includes(w)) {
-            matchedCount++
+        // Find missing or mispronounced words
+        let missingWords = []
+        cleanModelWords.forEach((mw) => {
+          if (mw.length > 3 && !cleanUserWords.includes(mw)) {
+            missingWords.push(mw)
           }
         })
 
-        const matchRatio = matchedCount / Math.max(1, userWords.length)
+        let feedbackHTML = ''
 
-        let feedback = ''
-        let emoji = '🌟'
-
-        if (userWords.length < 3) {
-          feedback =
-            'Svaret var litt kort. Prøv å utdype mer og koble det til din erfaring som fysioterapeut!'
-          emoji = '💡'
-        } else if (matchRatio > 0.4 || userWords.length > 10) {
-          feedback = `Utmerket jobbet, Ariane! Du traff på flere sentrale nøkkelord og setningen fløt fint. Uttalen din på norsk fungerer bra til intervjuet. Husk å holde rolig tempo! ${emoji}`
+        if (cleanUserWords.length < 3) {
+          feedbackHTML = `⚠️ <strong>Svar for kort:</strong> Mikrofonen fanget opp: <em>"${userText}"</em>. Prøv å lese hele setningen tydeligere og litt langsommere inn i mikrofonen.`
+        } else if (cleanUserWords.length >= 3 && missingWords.length <= 2) {
+          feedbackHTML = `🌟 <strong>Flott uttale, Ariane!</strong> Du sa: <em>"${userText}"</em>. Svaret treffer nesten perfekt på modellsvaret. Fortsett å snakke i dette rolige og sikre tempoet!`
         } else {
-          feedback = `Bra forsøk! Du fikk sagt noe, men prøv å sjekke modellsvaret for å få med flere spesifikke norske uttrykk og ord knyttet til barnehagen. Sjekk ordforrådet som «trygghet», «inkludert» og «motorikk».`
+          // Identify specific words to practice
+          let sampleCorrections = missingWords.slice(0, 3).join(',')
+          feedbackHTML = `🔍 <strong>Analyse av uttalen din:</strong><br>
+          Du sa: <em>"${userText}"</em><br>
+          💡 <strong>Tips for å forbedre deg:</strong> Noen ord ble ikke fanget opp helt riktig (som f.eks. <em>${sampleCorrections}</em>).<br>
+          👉 <strong>Consejo de pronunciación:</strong> Prueba a hacer clic en las palabras individuales del texto de arriba para escucharlas despacio, y pronuncia cada sílaba con calma. ¡Recuerda que en el barnehagen valoran más que hables tranquilo y seguro que rápido!`
         }
 
-        document.getElementById('ai-evaluation').innerText = feedback
+        document.getElementById('ai-evaluation').innerHTML = feedbackHTML
       }
 
       // Modal Question List
@@ -680,7 +778,7 @@
             'text-left p-3 hover:bg-teal-50 rounded-xl transition flex items-center justify-between group'
           btn.innerHTML = `
                     <span class="text-sm font-medium text-slate-800 group-hover:text-teal-700">${item.q}</span>
-                    <span class="text-xs bg-slate-100 group-hover:bg-teal-200 group-hover:text-teal-900 text-slate-600 px-2 py-1 rounded-lg shrink-0">#{index + 1}</span>
+                    <span class="text-xs bg-slate-100 group-hover:bg-teal-200 group-hover:text-teal-900 text-slate-600 px-2 py-1 rounded-lg shrink-0">#${index + 1}</span>
                 `
           btn.onclick = () => {
             loadQuestion(index)
